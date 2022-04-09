@@ -6,9 +6,10 @@ import org.springframework.stereotype.Component;
 public class Calculadora {
 
     public Calculadora(){
+
         System.out.println("Ejecutando constructor CalculatorService");
     }
-    public String holaMundo(){
+    public String holaMundo()   {
         return "Hola mundo!";
     }
 }
