@@ -10,6 +10,6 @@ public class ObEjercicios3JpaApplication {
 		SpringApplication.run(ObEjercicios3JpaApplication.class, args);
 	}
 
-	
+
 
 }
