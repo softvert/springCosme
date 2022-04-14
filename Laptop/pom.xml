@@ -9,19 +9,18 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>ob-rest-datajpa</artifactId>
+	<artifactId>Laptop</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>ob-rest-datajpa</name>
-	<description>Demo project for Spring Boot</description>
+	<name>Laptop</name>
+	<description>Este es un proyecto para gestionar Laptop</description>
 	<properties>
-		<java.version>18</java.version>
+		<java.version>17</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>

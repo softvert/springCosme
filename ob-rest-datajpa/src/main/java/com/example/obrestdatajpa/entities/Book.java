@@ -1,7 +1,10 @@
-package com.example.obrestdatajpa;
+package com.example.obrestdatajpa.entities;
+
+
 
 import javax.persistence.*;
 import java.time.LocalDate;
+
 @Entity
 @Table(name = "Books")
 public class Book {
