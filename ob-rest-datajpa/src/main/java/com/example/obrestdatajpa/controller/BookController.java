@@ -4,6 +4,8 @@ import com.example.obrestdatajpa.entities.Book;
 import com.example.obrestdatajpa.repository.BookRepository;
 import com.sun.xml.bind.v2.model.core.ID;
 import org.aspectj.weaver.loadtime.Agent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +18,7 @@ import java.util.Optional;
 @RestController
 public class BookController {
     //atributos
+    private final Logger log = LoggerFactory.getLogger(BookController.class);
     private BookRepository bookRepository;
     private Book book;
     //Constructores
@@ -38,7 +41,8 @@ public class BookController {
 
         }
 
-    //Obtener un libro por id
+    //Obtener un libro por id  se coloca el id entre llava para que pueda funcionar como una variable{id}"
+    //es decir que pueda recibir cualquier codigo de la db y retornar si existe
     @GetMapping(value = "/api/books/{id}")
     public ResponseEntity<Book> findOneById(@PathVariable Long id){
       Optional<Book> bookOpt = bookRepository.findById(id);
@@ -48,7 +52,7 @@ public class BookController {
       else
           //Opcion 2
           return ResponseEntity.notFound().build();
-      //Opcion 3
+      //Opcion 3 expresiones lambda
       //return bookOpt.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
 
 
@@ -56,11 +60,42 @@ public class BookController {
 
     //Crear libros
     @PostMapping("/api/books")
-    public Book create(@RequestBody Book book, @RequestHeader HttpHeaders headers){
+    public ResponseEntity<Book> create(@RequestBody Book book, @RequestHeader HttpHeaders headers){
        // System.out.println(headers.get("User-Agent"));
+        if (book.getId()!=null){//quiere decir que existe el id por tanto no es una creacion
+            log.warn("Estas intentando hacer algo distinto que crear un libro");
+            System.out.print("Deberias de revisar el metodo que estas queriendo usar");
+            return ResponseEntity.badRequest().build();
+
+        }
 
         //guardar el libro recibido por parametro en la db
-        return bookRepository.save(book);
+        //el parametro se puede cargar en postman, en caso de la vida real seria desde un formulario de una app
+        Book result = bookRepository.save(book);
+        return ResponseEntity.ok(result);//el libro devuelto tiene una clave primaria
+
+    }
+
+    /*
+    actualizar Book
+     */
+    @PutMapping("/api/books")
+    public ResponseEntity<Book> update(@RequestBody Book book){
+        if (book.getId() == null){//si tiene el id se puede actualizar los datos del libro
+            log.warn("Estas intentando hacer algo distinto que actualizar");
+            return ResponseEntity.badRequest().build();
+
+
+        }
+        if (!bookRepository.existsById(book.getId())){
+            log.warn("Estas intentando actualizar un libro que no ha sido encontrado");
+            return ResponseEntity.notFound().build();
+
+        }
+        //El proceso de actualizacion
+        Book result = bookRepository.save(book);
+        return ResponseEntity.ok(result);//el libro devuelto tiene una clave primaria
+
 
     }
 
