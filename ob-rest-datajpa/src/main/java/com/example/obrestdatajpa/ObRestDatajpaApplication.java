@@ -5,9 +5,11 @@ import com.example.obrestdatajpa.repository.BookRepository;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.time.LocalDate;
 
+@EnableWebMvc
 @SpringBootApplication
 public class ObRestDatajpaApplication {
 
