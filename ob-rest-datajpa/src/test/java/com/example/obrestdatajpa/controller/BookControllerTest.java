@@ -2,14 +2,14 @@ package com.example.obrestdatajpa.controller;
 
 import com.example.obrestdatajpa.entities.Book;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,6 +29,7 @@ class BookControllerTest {
         testRestTemplate = new TestRestTemplate(restTemplateBuilder);
     }
 
+    @DisplayName("Comprobar hola mundo desde controladores SpringRest")
     @Test
     void hello() {
         ResponseEntity<String> response =
@@ -53,9 +54,36 @@ class BookControllerTest {
 
     @Test
     void findOneById() {
+        ResponseEntity<Book[]> response=
+                testRestTemplate.getForEntity("/api/books/1", Book[].class);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
     @Test
     void create() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+
+        String json = """
+                      {
+                      "title": "Kinkonadfdasf",
+                      "author": "Robertrojita ",
+                      "pages": 250,
+                      "price": 1000.0,
+                      "releaseDate": "2012-03-12",
+                      "online": true
+                    }
+                """;
+
+        HttpEntity<String> request = new HttpEntity<>(json, headers);
+        ResponseEntity<Book> response = testRestTemplate.exchange("/api/books", HttpMethod.POST,request, Book.class);
+
+        Book result = response.getBody();
+
+        assertEquals(1l, result.getId());
+        assertEquals("Kinkonadfdasf", result.getTitle());
     }
+
 }
